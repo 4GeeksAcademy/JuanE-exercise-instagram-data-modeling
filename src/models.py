@@ -30,7 +30,7 @@ class Follower(Base):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    user_from_id = Column(String(250), nullable=False)
+    user_from_id = Column(Integer, ForeignKey('user.id'))  #Aqui deberia ir una ForeignKey
     user_id = Column(Integer, ForeignKey('user.id'))
 
 class User(Base):
@@ -42,18 +42,16 @@ class User(Base):
     first_name = Column(String(250))
     last_name = Column(String(250), nullable=False)
     email = Column(String(250))
-    person_id = Column(Integer, ForeignKey('follower.id'))
-    person = relationship(Follower)
+    
 
 class Post(Base):
     __tablename__ = 'post'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    user_id = Column(String(250))
     text_post = Column(String(250))
-    person_id = Column(Integer, ForeignKey('user.id'))
-    person = relationship(User)
+    user_id = Column(Integer, ForeignKey('user.id')) #para mejor entendimiento y evitar confunsiones nombrar user_id, ya que tu tabla se llama user
+    person = relationship(User) #llamar user
 
 class Comment(Base):
     __tablename__ = 'comment'
@@ -61,11 +59,11 @@ class Comment(Base):
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     comment_next = Column(String(250))
-    author_id = Column(String(250))
-    post_id = Column(String(250))
-    person_id = Column(Integer, ForeignKey('user.id'))
-    person = relationship(Post, User)
-
+    user_id = Column(String(250)) #eliminar, esta haria lo mismo que person_id que deberia llamarse user_id seria user_id
+    post_id = Column(Integer, ForeignKey('post.id')) #Esta debe ser un ForeignKey con post, sino no estas haciendo el vinculo y añadir tambien la relationship
+    user_id = Column(Integer, ForeignKey('user.id')) #igual que en la tabla Post, nombrar user_id
+    person = relationship(Post) #relationship separadas, una por tabla
+    person = relationship(User)
 
     def to_dict(self):
         return {}
