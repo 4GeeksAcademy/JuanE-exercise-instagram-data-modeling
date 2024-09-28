@@ -59,10 +59,9 @@ class Comment(Base):
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     comment_next = Column(String(250))
-    user_id = Column(String(250)) #eliminar, esta haria lo mismo que person_id que deberia llamarse user_id seria user_id
     post_id = Column(Integer, ForeignKey('post.id')) #Esta debe ser un ForeignKey con post, sino no estas haciendo el vinculo y añadir tambien la relationship
     user_id = Column(Integer, ForeignKey('user.id')) #igual que en la tabla Post, nombrar user_id
-    person = relationship(Post) #relationship separadas, una por tabla
+    post = relationship(Post) #relationship separadas, una por tabla
     person = relationship(User)
 
     def to_dict(self):
